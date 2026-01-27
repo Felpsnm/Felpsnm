@@ -1,13 +1,35 @@
+import argparse
 import os
-import re
 import html
 import requests
 from datetime import datetime, timezone
+import hashlib
+from pathlib import Path
+import glob
 
-START = "<!-- NOW_PLAYING:START -->"
-END = "<!-- NOW_PLAYING:END -->"
+SVG_TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0b0f14"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
+  <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">{title}</text>
+  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">{line}</text>
+  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">{stamp}</text>
+</svg>
+"""
 
-def fetch_lastfm_now():
+def svg_text(title: str, line: str) -> str:
+    stamp = datetime.now(timezone.utc).strftime("UTC %Y-%m-%d %H:%M")
+    return SVG_TEMPLATE.format(
+        title=html.escape(title),
+        line=html.escape(line),
+        stamp=html.escape(stamp),
+    )
+
+def fetch_lastfm() -> tuple[str, str]:
     user = os.environ.get("LASTFM_USER", "").strip()
     api_key = os.environ.get("LASTFM_API_KEY", "").strip()
     if not user or not api_key:
@@ -44,40 +66,37 @@ def fetch_lastfm_now():
     line = f"{artist} — {name}"
     return (title, line)
 
-def build_svg(title: str, line: str):
-    title_e = html.escape(title)
-    line_e = html.escape(line)
-    stamp = datetime.now(timezone.utc).strftime("UTC %Y-%m-%d %H:%M")
+def make_id(title: str, line: str) -> str:
+    # muda quando mudar música OU status (Now/Last)
+    base = f"{title}|{line}"
+    return hashlib.sha1(base.encode("utf-8")).hexdigest()[:12]
 
-    return f"""{START}
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0b0f14"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
-  <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">{title_e}</text>
-  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">{line_e}</text>
-  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">{stamp}</text>
-</svg>
-{END}
-"""
+def cleanup_old_svgs(keep: int = 6):
+    files = sorted(glob.glob("assets/now-playing-*.svg"))
+    if len(files) <= keep:
+        return
+    for f in files[:-keep]:
+        Path(f).unlink(missing_ok=True)
 
+def main():
+    Path("assets").mkdir(parents=True, exist_ok=True)
 
-def patch_readme(path="README.md"):
-    title, line = fetch_lastfm_now()
-    block = build_svg(title, line)
+    title, line = fetch_lastfm()
+    hid = make_id(title, line)
 
-    s = open(path, "r", encoding="utf-8").read()
-    pattern = re.compile(re.escape(START) + r".*?" + re.escape(END), re.DOTALL)
-    if not pattern.search(s):
-        raise SystemExit("NOW_PLAYING block not found in README.md")
+    out_file = Path(f"assets/now-playing-{hid}.svg")
+    out_file.write_text(svg_text(title, line), encoding="utf-8")
 
-    s2 = pattern.sub(block.strip(), s)
-    open(path, "w", encoding="utf-8").write(s2)
+    # salva o id pra workflow usar se quiser
+    Path("assets/now-playing.id").write_text(hid, encoding="utf-8")
+    Path("assets/now-playing.latest").write_text(out_file.name, encoding="utf-8")
+
+    cleanup_old_svgs(keep=6)
+
+    print("id:", hid)
+    print("file:", out_file.as_posix())
 
 if __name__ == "__main__":
-    patch_readme()
-    print("README updated (inline SVG).")
+    ap = argparse.ArgumentParser()
+    ap.parse_args()
+    main()
