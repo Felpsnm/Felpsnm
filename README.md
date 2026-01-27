@@ -16,21 +16,21 @@ Felpsnm — Profile README
 
 <img src="assets/threebody.gif" width="860" alt="Three-body simulation"/>
 
-<br/>
+</div>
 
 <!-- NOW_PLAYING:START -->
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0b0f14"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
-  <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">Now playing</text>
-  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">Florence Road — Heavy</text>
-  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC 2026-01-27 05:24</text>
-</svg>
-<!-- NOW_PLAYING:END -->
-
+<div align="center">
+  <svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90" style="display:block;margin:0 auto;">
+    <defs>
+      <linearGradient id="np_g" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#0b0f14"/>
+        <stop offset="100%" stop-color="#111827"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#np_g)" />
+    <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">Now playing</text>
+    <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">Loading…</text>
+    <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC --:--</text>
+  </svg>
 </div>
+<!-- NOW_PLAYING:END -->
