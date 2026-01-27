@@ -1,13 +1,13 @@
 name: Update now playing
 
-concurrency:
-  group: now-playing
-  cancel-in-progress: true
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
+
+concurrency:
+  group: now-playing
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -25,45 +25,17 @@ jobs:
       - name: Install deps
         run: pip install requests
 
-      - name: Render now-playing svg
+      - name: Update inline SVG in README
         env:
           LASTFM_USER: ${{ secrets.LASTFM_USER }}
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-        run: python scripts/lastfm_now_playing.py --out assets/now-playing.svg
-
-      - name: Update README cache-bust id (hash)
-        run: |
-          python - <<'PY'
-          import re
-          from pathlib import Path
-
-          idv = Path("assets/now-playing.id").read_text(encoding="utf-8").strip()
-          readme = Path("README.md")
-          s = readme.read_text(encoding="utf-8")
-
-          # Atualiza id=... se já existir
-          s2 = re.sub(
-              r'(now-playing\.svg\?raw=1&id=)[0-9a-fA-F]+',
-              r'\g<1>' + idv,
-              s
-          )
-
-          # Se não existia id=..., adiciona
-          if s2 == s:
-              s2 = s.replace(
-                  "now-playing.svg?raw=1",
-                  f"now-playing.svg?raw=1&id={idv}"
-              )
-
-          readme.write_text(s2, encoding="utf-8")
-          print("README updated with id =", idv)
-          PY
+        run: python scripts/update_now_playing_inline.py
 
       - name: Commit changes (only if changed)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/now-playing.svg assets/now-playing.id README.md
+          git add README.md
           git diff --cached --quiet && exit 0
-          git commit -m "chore: update now playing"
+          git commit -m "chore: update now playing (inline)"
           git push
