@@ -18,6 +18,6 @@ Felpsnm — Profile README
 
 <br/>
 
-<img src="assets/now-playing.svg?raw=1&id=55705ee0f04aoot" width="860" alt="Now playing" />
+<img  src="https://raw.githubusercontent.com/Felpsnm/Felpsnm/main/assets/now-playing.svg?id=boot" width="860" alt="Now playing" />
 
 </div>
