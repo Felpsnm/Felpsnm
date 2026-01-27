@@ -1,0 +1,39 @@
+name: Update profile assets
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Render three-body gif
+        run: python scripts/threebody_gif.py --out assets/threebody.gif
+
+      - name: Render now-playing svg
+        env:
+          LASTFM_USER: ${{ secrets.LASTFM_USER }}
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        run: python scripts/lastfm_now_playing.py --out assets/now-playing.svg
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/threebody.gif assets/now-playing.svg
+          git commit -m "chore: update profile visuals" || exit 0
+          git push
