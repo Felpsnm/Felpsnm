@@ -50,20 +50,21 @@ def build_svg(title: str, line: str):
     stamp = datetime.now(timezone.utc).strftime("UTC %Y-%m-%d %H:%M")
 
     return f"""{START}
-      <svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90">
-        <defs>
-          <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#0b0f14"/>
-            <stop offset="100%" stop-color="#111827"/>
-          </linearGradient>
-        </defs>
-        <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
-        <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">{title_e}</text>
-        <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">{line_e}</text>
-        <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">{stamp}</text>
-      </svg>
-      {END}
-      """
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0b0f14"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
+  <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">{title_e}</text>
+  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">{line_e}</text>
+  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">{stamp}</text>
+</svg>
+{END}
+"""
+
 
 def patch_readme(path="README.md"):
     title, line = fetch_lastfm_now()
