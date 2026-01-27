@@ -1,4 +1,4 @@
-name: Update profile assets
+name: Update Github profile assets
 
 on:
   workflow_dispatch:
