@@ -19,7 +19,7 @@ Felpsnm — Profile README
 <br/>
 
 <!-- NOW_PLAYING:START -->
-<svg xmlns="http://www.w3.org/2000/svg" width="860" height="110" viewBox="0 0 860 110" role="img" aria-label="Last played">
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="110" viewBox="0 0 860 110" role="img" aria-label="Now playing">
   <defs>
     <linearGradient id="np_g" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#0b0f14"/>
@@ -36,9 +36,9 @@ Felpsnm — Profile README
 
   <rect x="0" y="0" width="860" height="110" rx="22" fill="url(#np_g)"/>
 
-  <text x="28" y="40" fill="#cbd5e1" font-size="14" font-family="monospace" opacity="0.95">Last played</text>
-  <text x="28" y="74" fill="#e5e7eb" font-size="22" font-family="monospace" filter="url(#np_glow)">Knox — Not The 1975</text>
-  <text x="832" y="96" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC 2026-01-27 05:18</text>
+  <text x="28" y="40" fill="#cbd5e1" font-size="14" font-family="monospace" opacity="0.95">Now playing</text>
+  <text x="28" y="74" fill="#e5e7eb" font-size="22" font-family="monospace" filter="url(#np_glow)">Dr. Dog — Where&#x27;d All The Time Go?</text>
+  <text x="832" y="96" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC 2026-01-27 05:19</text>
 </svg>
 <!-- NOW_PLAYING:END -->
 
