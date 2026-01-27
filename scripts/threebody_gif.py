@@ -29,7 +29,7 @@ def leapfrog(x, v, m, dt, steps):
         v += 0.5 * dt * a
         yield x.copy()
 
-def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=20, dpi=110):
+def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=10, dpi=110):
     # Figure-eight initial conditions (equal masses)
     m = np.array([1.0, 1.0, 1.0])
 
@@ -64,8 +64,8 @@ def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=20, dpi=1
 
         fig = plt.figure(figsize=(7.2, 3.2), dpi=dpi)
         ax = fig.add_subplot(111)
-        ax.set_facecolor("#0b0f14")
-        fig.patch.set_facecolor("#0b0f14")
+        ax.set_facecolor("#0d1117")
+        fig.patch.set_facecolor("#0d1117")
 
         # draw trails + bodies
         for i in range(3):
@@ -77,14 +77,6 @@ def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=20, dpi=1
         ax.set_xlim(-lim, lim)
         ax.set_ylim(-0.95, 0.95)
         ax.axis("off")
-        ax.text(
-            0.02, 0.92,
-            "three-body • figure-eight",
-            transform=ax.transAxes,
-            fontsize=11,
-            family="monospace",
-            alpha=0.85
-        )
 
         fig.canvas.draw()
 
