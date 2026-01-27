@@ -19,10 +19,21 @@ SVG_TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90
 </svg>
 """
 
+def write_svg(out_path: str, title: str, line: str):
+    stamp = datetime.utcnow().strftime("UTC %Y-%m-%d %H:%M")
+    svg = SVG_TEMPLATE.format(
+        title=html.escape(title),
+        line=html.escape(line),
+        stamp=html.escape(stamp),
+    )
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(svg)
+
 def main(out_path: str):
     user = os.environ.get("LASTFM_USER", "").strip()
     api_key = os.environ.get("LASTFM_API_KEY", "").strip()
     if not user or not api_key:
+        write_svg(out_path, "Now playing", "Missing LASTFM_USER / LASTFM_API_KEY")
         raise SystemExit("Missing LASTFM_USER or LASTFM_API_KEY env vars.")
 
     url = "https://ws.audioscrobbler.com/2.0/"
@@ -33,25 +44,47 @@ def main(out_path: str):
         "format": "json",
         "limit": 1
     }
-    data = requests.get(url, params=params, timeout=15).json()
-    track = data["recenttracks"]["track"][0]
 
-    artist = track["artist"]["#text"]
-    name = track["name"]
-    now = track.get("@attr", {}).get("nowplaying") == "true"
+    try:
+        r = requests.get(url, params=params, timeout=20)
+        r.raise_for_status()
+        data = r.json()
+    except Exception as e:
+        write_svg(out_path, "Now playing", f"Last.fm request failed")
+        raise
+
+    # Last.fm error payloads sometimes include { "error": ..., "message": ... }
+    if isinstance(data, dict) and "error" in data:
+        msg = data.get("message", "Last.fm API error")
+        write_svg(out_path, "Now playing", f"{msg}")
+        raise SystemExit(f"Last.fm API error: {msg}")
+
+    recent = (data.get("recenttracks") or {}).get("track")
+
+    # track can be [] or a dict if only one item (API quirk)
+    if recent is None:
+        write_svg(out_path, "Now playing", "No data from Last.fm")
+        return
+
+    if isinstance(recent, list):
+        if len(recent) == 0:
+            write_svg(out_path, "Now playing", "No recent tracks yet")
+            return
+        track = recent[0]
+    elif isinstance(recent, dict):
+        track = recent
+    else:
+        write_svg(out_path, "Now playing", "Unexpected Last.fm response")
+        return
+
+    artist = ((track.get("artist") or {}).get("#text")) or "Unknown artist"
+    name = track.get("name") or "Unknown track"
+    now = (track.get("@attr") or {}).get("nowplaying") == "true"
 
     title = "Now playing" if now else "Last played"
     line = f"{artist} — {name}"
 
-    # escape for SVG
-    title = html.escape(title)
-    line = html.escape(line)
-
-    stamp = datetime.utcnow().strftime("UTC %Y-%m-%d %H:%M")
-
-    svg = SVG_TEMPLATE.format(title=title, line=line, stamp=stamp)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(svg)
+    write_svg(out_path, title, line)
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
