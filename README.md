@@ -28,7 +28,7 @@ Felpsnm — Profile README
   </defs>
   <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
   <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">Now playing</text>
-  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">Loading...</text>
-  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">{stamp}</text>
+  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">James Marriott — The Other Side</text>
+  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC 2026-01-27 05:43</text>
 </svg>
 <!-- NOW_PLAYING:END -->
