@@ -2,6 +2,8 @@ import argparse
 from collections import deque
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
+import matplotlib.colors as mcolors
 from PIL import Image
 
 def accel(x, m, G=1.0, eps=1e-3):
@@ -27,7 +29,7 @@ def leapfrog(x, v, m, dt, steps):
         v += 0.5 * dt * a
         yield x.copy()
 
-def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=300, dpi=110):
+def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=20, dpi=110):
     # Figure-eight initial conditions (equal masses)
     m = np.array([1.0, 1.0, 1.0])
 
@@ -69,7 +71,7 @@ def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=300, dpi=
         for i in range(3):
             t = np.array(trails[i])
             if len(t) > 1:
-                ax.plot(t[:, 0], t[:, 1], linewidth=1.2, alpha=0.95)
+                ax.plot(t[:, 0], t[:, 1], linewidth=0.2, alpha=0.95)
             ax.scatter(state[i, 0], state[i, 1], s=36)
 
         ax.set_xlim(-lim, lim)
@@ -85,8 +87,10 @@ def render_gif(out_path: str, frames=180, dt=0.008, substeps=10, trail=300, dpi=
         )
 
         fig.canvas.draw()
-        w, h = fig.canvas.get_width_height()
-        img = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(h, w, 3)
+
+        buf = np.asarray(fig.canvas.buffer_rgba())      # shape: (h, w, 4)
+        img = buf[..., :3].copy()                       # RGB (h, w, 3)
+
         imgs.append(Image.fromarray(img))
         plt.close(fig)
 
