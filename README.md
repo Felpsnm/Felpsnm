@@ -19,25 +19,17 @@ Felpsnm — Profile README
 <br/>
 
 <!-- NOW_PLAYING:START -->
-<svg xmlns="http://www.w3.org/2000/svg" width="860" height="110" viewBox="0 0 860 110" role="img" aria-label="Now playing">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90">
   <defs>
-    <linearGradient id="np_g" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#0b0f14"/>
       <stop offset="100%" stop-color="#111827"/>
     </linearGradient>
-    <filter id="np_glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
-
-  <rect x="0" y="0" width="860" height="110" rx="22" fill="url(#np_g)"/>
-  <text x="28" y="40" fill="#cbd5e1" font-size="14" font-family="monospace" opacity="0.95">Now playing</text>
-  <text x="28" y="74" fill="#e5e7eb" font-size="22" font-family="monospace" filter="url(#np_glow)">Loading…</text>
-  <text x="832" y="96" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC --:--</text>
+  <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
+  <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">Now playing</text>
+  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">Loading…</text>
+  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC --:--</text>
 </svg>
 <!-- NOW_PLAYING:END -->
 
