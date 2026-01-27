@@ -26,10 +26,12 @@ Felpsnm — Profile README
       <stop offset="100%" stop-color="#111827"/>
     </linearGradient>
   </defs>
-  <rect x="0" y="0" width="720" height="90" rx="18" fill="url(#g)" />
-  <text x="26" y="34" fill="#cbd5e1" font-size="14" font-family="monospace">Now playing</text>
-  <text x="26" y="62" fill="#e5e7eb" font-size="18" font-family="monospace">Loading…</text>
-  <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC --:--</text>
+
+  <rect x="0" y="0" width="860" height="110" rx="22" fill="url(#np_g)"/>
+
+  <text x="28" y="40" fill="#cbd5e1" font-size="14" font-family="monospace" opacity="0.95">Now playing</text>
+  <text x="28" y="74" fill="#e5e7eb" font-size="22" font-family="monospace" filter="url(#np_glow)">Dr. Dog — Where&#x27;d All The Time Go?</text>
+  <text x="832" y="96" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">UTC 2026-01-27 05:19</text>
 </svg>
 <!-- NOW_PLAYING:END -->
 
