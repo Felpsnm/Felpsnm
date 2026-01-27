@@ -29,7 +29,7 @@ jobs:
         env:
           LASTFM_USER: ${{ secrets.LASTFM_USER }}
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-        run: python scripts/update_now_playing_inline.py
+        run: python scripts/lastfm_now_playing.py
 
       - name: Commit changes (only if changed)
         run: |
