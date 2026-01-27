@@ -1,9 +1,10 @@
-# scripts/lastfm_now_playing.py
 import argparse
 import os
 import html
 import requests
 from datetime import datetime
+import hashlib
+from pathlib import Path
 
 SVG_TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90" viewBox="0 0 720 90">
   <defs>
@@ -18,6 +19,13 @@ SVG_TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" width="720" height="90
   <text x="690" y="78" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">{stamp}</text>
 </svg>
 """
+
+def write_id(out_svg_path: str, line: str):
+    # hash baseado no "nome da música" (artist — track)
+    h = hashlib.sha1(line.encode("utf-8")).hexdigest()[:12]  # curto e estável
+    Path("assets").mkdir(parents=True, exist_ok=True)
+    Path("assets/now-playing.id").write_text(h, encoding="utf-8")
+    return h
 
 def write_svg(out_path: str, title: str, line: str):
     stamp = datetime.utcnow().strftime("UTC %Y-%m-%d %H:%M")
@@ -83,6 +91,8 @@ def main(out_path: str):
 
     title = "Now playing" if now else "Last played"
     line = f"{artist} — {name}"
+
+    write_id(out_path, line)
 
     write_svg(out_path, title, line)
 
