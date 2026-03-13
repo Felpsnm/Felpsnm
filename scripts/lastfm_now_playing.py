@@ -84,6 +84,16 @@ def main():
     title, line = fetch_lastfm()
     hid = make_id(title, line)
 
+    for filename in os.listdir(Path("assets")):
+        if filename.endswith(".svg"):
+            file_path = os.path.join(Path("assets"), filename)
+            try:
+                os.remove(file_path)
+                print(f"Deleted: {file_path}")
+            except Exception as e:
+                print(f"Error deleting {file_path}: {e}")
+
+
     out_file = Path(f"assets/now-playing-{hid}.svg")
     out_file.write_text(svg_text(title, line), encoding="utf-8")
 
