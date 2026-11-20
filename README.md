@@ -17,7 +17,7 @@ Felpsnm — Profile README
 <img src="assets/threebody.gif" width="860" alt="Three-body simulation"/>
 
 <!-- NOW_PLAYING:START -->
-<img src="assets/now-playing-6a04ef43f776.svg" width="720" height="90" alt="Now playing" />
+<img src="assets/now-playing-9354046203af.svg" width="720" height="90" alt="Now playing" />
 <!-- NOW_PLAYING:END -->
 
 </div>
